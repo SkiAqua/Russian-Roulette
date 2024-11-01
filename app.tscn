@@ -1,9 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtv060wthgke5"]
+[gd_scene load_steps=2 format=3 uid="uid://dtv060wthgke5"]
 
 [ext_resource type="Script" path="res://gun.gd" id="1_d7sxu"]
-[ext_resource type="Texture2D" uid="uid://clah8fmbiltc3" path="res://assets/revolver380body.png" id="1_j6dmo"]
-[ext_resource type="Texture2D" uid="uid://dd5wyu8xxd76w" path="res://assets/coltpythonhammer.png" id="2_nee2x"]
-[ext_resource type="Texture2D" uid="uid://5501kilr5wck" path="res://assets/coltpythontrigger.png" id="3_v7vdx"]
 
 [node name="App" type="Node"]
 
@@ -15,28 +12,14 @@ script = ExtResource("1_d7sxu")
 
 [node name="AudioSPlayer" type="AudioStreamPlayer" parent="Gun"]
 
-[node name="Hammer" type="Sprite2D" parent="Gun"]
-position = Vector2(152, -170)
-texture = ExtResource("2_nee2x")
-offset = Vector2(23, -16)
-
-[node name="Trigger" type="Sprite2D" parent="Gun"]
-position = Vector2(43, -33)
-rotation = 0.0798272
-texture = ExtResource("3_v7vdx")
-offset = Vector2(-2, 34)
-
-[node name="Body" type="Sprite2D" parent="Gun"]
-texture = ExtResource("1_j6dmo")
-
-[node name="Barrel" type="Sprite2D" parent="Gun"]
-position = Vector2(-4, -148)
-
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="HUD"]
 layer = -1
@@ -49,30 +32,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.34902, 0.34902, 0.552941, 1)
 metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
 
-[node name="TriggerButton" type="Button" parent="."]
-offset_left = 657.0
-offset_top = 328.0
-offset_right = 797.0
-offset_bottom = 468.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(70, 70)
-
-[node name="HammerButton" type="Button" parent="."]
-offset_left = 805.0
-offset_top = 88.0
-offset_right = 945.0
-offset_bottom = 228.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(70, 70)
-
-[node name="BarrelButton" type="Button" parent="."]
-offset_left = 613.0
-offset_top = 146.0
-offset_right = 753.0
-offset_bottom = 286.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(70, 70)
+[node name="Triggers" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
