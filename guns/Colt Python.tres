@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="GunResource" load_steps=6 format=3 uid="uid://cp6xsnvg2ddng"]
+
+[ext_resource type="Texture2D" uid="uid://h21rfn48pgib" path="res://assets/Colt Python Barrel.png" id="1_8cxsj"]
+[ext_resource type="Script" path="res://guns/GunResource.gd" id="1_ka27n"]
+[ext_resource type="Texture2D" uid="uid://cws8xoa27yu5s" path="res://assets/Colt Python Body.png" id="2_flfon"]
+[ext_resource type="Texture2D" uid="uid://bpvi5m8sjq0h4" path="res://assets/Colt Python Hammer.png" id="3_l1soc"]
+[ext_resource type="Texture2D" uid="uid://coeub300ysoen" path="res://assets/Colt Python Trigger.png" id="4_1ubx0"]
+
+[resource]
+script = ExtResource("1_ka27n")
+_bullets_capacity = 6
+_body_texture = ExtResource("2_flfon")
+_barrel_position = Vector2(125, -137)
+_hammer_position = Vector2(304, -145)
+_trigger_position = Vector2(181, -50)
+_barrel_texture = ExtResource("1_8cxsj")
+_hammer_texture = ExtResource("3_l1soc")
+_hammer_offset = Vector2(-4, -34)
+_trigger_texture = ExtResource("4_1ubx0")
+_trigger_offset = Vector2(0, 40)
