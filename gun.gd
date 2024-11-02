@@ -1,29 +1,14 @@
-@tool
 extends Node2D
 class_name Gun
 
-@export var _bullet_capacity: = 6
-
-@onready var hammer: = $Hammer
-@onready var trigger: = $Trigger
-@onready var body: = $Body
-@onready var barrel: = $Barrel
-
-var hammer_button: GunComponentButton
-var trigger_button: GunComponentButton
-var barrel_button: GunComponentButton
-var bullets_in_the_barrel: Array[bool] = []
-
-func _init():
-	for bullets in range(_bullet_capacity):
-		bullets_in_the_barrel.append(false)
+@export var gun: GunResource
 
 func _ready():
-	hammer_button = GunComponentButton.new(hammer)
-	get_parent().get_node('Triggers').add_child(hammer_button)
+	gun.assemble_components(self)
 	
 	Global.hud.resized.connect(when_game_resize)
 	when_game_resize()
+	
 
 func when_game_resize():
 	position = Global.hud.size / 2

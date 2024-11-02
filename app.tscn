@@ -1,12 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtv060wthgke5"]
+[gd_scene load_steps=3 format=3 uid="uid://dtv060wthgke5"]
 
 [ext_resource type="Script" path="res://gun.gd" id="1_d7sxu"]
+[ext_resource type="Resource" uid="uid://cp6xsnvg2ddng" path="res://guns/Colt Python.tres" id="2_qbwvd"]
 
 [node name="App" type="Node"]
 
 [node name="Gun" type="Node2D" parent="."]
 position = Vector2(687, 364)
 script = ExtResource("1_d7sxu")
+gun = ExtResource("2_qbwvd")
 
 [node name="Animation" type="AnimationPlayer" parent="Gun"]
 
