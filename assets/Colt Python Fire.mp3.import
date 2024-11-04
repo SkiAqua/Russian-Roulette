@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bf6mq7ic5m1y8"
+path="res://.godot/imported/Colt Python Fire.mp3-79da80b4cda6feb577f4b39113bf020f.mp3str"
+
+[deps]
+
+source_file="res://assets/Colt Python Fire.mp3"
+dest_files=["res://.godot/imported/Colt Python Fire.mp3-79da80b4cda6feb577f4b39113bf020f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

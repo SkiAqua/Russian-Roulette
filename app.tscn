@@ -12,7 +12,7 @@ gun = ExtResource("2_qbwvd")
 
 [node name="Animation" type="AnimationPlayer" parent="Gun"]
 
-[node name="AudioSPlayer" type="AudioStreamPlayer" parent="Gun"]
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="Gun"]
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
@@ -39,5 +39,3 @@ metadata/_edit_lock_ = true
 [node name="Triggers" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
