@@ -20,3 +20,7 @@ _hammer_texture = ExtResource("3_l1soc")
 _hammer_offset = Vector2(-4, -34)
 _trigger_texture = ExtResource("4_1ubx0")
 _trigger_offset = Vector2(0, 40)
+trigger_start_angle = 0
+trigger_final_angle = -30
+hammer_start_angle = 0
+hammer_final_angle = 30
