@@ -42,7 +42,7 @@ func set_trigger_activation(value: float):
 		trigger_ready = false
 	
 	set_hammer_activation(trigger_activation)
-	gun.trigger.rotation = lerp(gun.trigger_clamp[0], gun.trigger_clamp[1], trigger_activation) * PI / 180
+	gun.trigger.rotation = lerp(gun.trigger_start_angle, gun.trigger_final_angle, trigger_activation) * PI / 180
 
 func set_hammer_activation(value: float):
 	hammer_activation = value
@@ -51,7 +51,7 @@ func set_hammer_activation(value: float):
 		hammer_activation = 1.0
 		hammer_ready = true
 	
-	gun.hammer.rotation = lerp(gun.hammer_clamp[0], gun.hammer_clamp[1], value) * PI / 180
+	gun.hammer.rotation = lerp(gun.hammer_start_angle, gun.hammer_final_angle, value) * PI / 180
 
 func set_trigger_ready():
 	trigger_ready = true
