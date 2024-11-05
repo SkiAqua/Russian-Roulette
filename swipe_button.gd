@@ -24,7 +24,6 @@ func _draw():
 
 	draw_rect(Rect2(_click_offset-limit, limit*2), _debug_line_color, false, 1)
 
-	
 func _init():
 	set_debug_visibility(_debug_visibility)
 	action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
@@ -32,6 +31,8 @@ func _init():
 	button_down.connect(update_click_offset)
 
 func _physics_process(delta: float) -> void:
+	swipe_offset.x = 0
+	swipe_offset.y = 0
 	if button_pressed:
 		swipe_offset = get_global_mouse_position() - _click_position
 
@@ -43,6 +44,10 @@ func _physics_process(delta: float) -> void:
 					button_up.emit()
 					limit_exceeded.emit(abs(swipe_offset) + _click_offset)
 					_limit_broke = true
+
+func release_swipe():
+	swipe_offset = Vector2.ZERO
+	_limit_broke = true
 
 func set_debug_visibility(value):
 	_debug_visibility = value
