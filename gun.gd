@@ -1,70 +1,112 @@
 extends Node2D
 class_name Gun
 
-@export var gun: GunResource
+@export var gun_data: GunResource 
 
-@onready var gun_audio_player: = $AudioPlayer
+@onready var audio_player := $AudioPlayer
+@onready var animation_player := $Animation
 
-var trigger_activation: = 0.0:
-	set = set_trigger_activation
+var trigger_pull_ratio := 0.0:
+	set = set_trigger_pull_ratio
 
-var trigger_ready: = true
+var trigger_fire_point = 0.9
+var trigger_ready: bool
 
-var hammer_activation: = 0.0
-var hammer_ready: = false
+var hammer_pull_ratio := 0.0
+var hammer_ready := true
+var hammer_locked = false
 
-var bullets_in_cylinder: Array[bool] = []
+var cylinder: Array[bool] = []
+
+@onready var cylinder_selected: = randi_range(1, gun_data.bullets_capacity)
 func _ready():
-	gun.assemble_components(self, get_tree().root.get_node('/root/App/Triggers'))
-	gun.trigger_button.limit = gun.trigger_button.size
-	gun.trigger_button.button_down.connect(set_trigger_ready)
-	for b in range(gun._bullets_capacity):
-		bullets_in_cylinder.append(true)
+	gun_data.assemble_components(self, get_tree().root.get_node('/root/App/Triggers'))
+	gun_data.trigger_button.limit = gun_data.trigger_button.size
+	#gun_data.trigger_button.button_down.connect(reset_trigger_ready)
+	if gun_data.is_double_action:
+		trigger_ready = true
+	else:
+		trigger_ready = false
+
+
+	# Inicializa o cilindro sem balas, conforme a capacidade definida
+	cylinder.clear()  # Garante que o cilindro comece vazio antes de adicionar balas
+	for __ in range(gun_data.bullets_capacity):
+		cylinder.append(false)  # Adiciona um espaço vazio para cada posição no cilindro
+
+	# Conecta o evento de redimensionamento da HUD e ajusta a posição inicialmente
+	Global.hud.resized.connect(adjust_position_on_resize)
+	adjust_position_on_resize()
 	
-	
-	Global.hud.resized.connect(when_game_resize)
-	when_game_resize()
+	#temp
+	cylinder.pop_at(0)
+	cylinder.insert(randi_range(1,gun_data.bullets_capacity-1), true)
+
 
 func _physics_process(delta: float) -> void:
-	if gun.trigger_button.swipe_offset.x > 0:
-		set_trigger_activation(gun.trigger_button.swipe_offset.x/gun.trigger_button.size.x)
-	elif trigger_activation > 0:
-		set_trigger_activation(clamp(trigger_activation-.1, 0,1))
-func set_trigger_activation(value: float):
-	if not trigger_ready:
-		return
-		
-	trigger_activation = value
+	# Atualiza o quanto o gatilho foi puxado
+	if gun_data.trigger_button.swipe_offset.x > 0:
+		set_trigger_pull_ratio(gun_data.trigger_button.swipe_offset.x / gun_data.trigger_button.size.x)
+	elif trigger_pull_ratio > 0:
+		set_trigger_pull_ratio(trigger_pull_ratio - 0.1)
+
+	# Atualiza o quanto o martelo foi puxado
+	if gun_data.hammer_button.swipe_offset.x > 0:
+		set_hammer_pull_ratio(gun_data.hammer_button.swipe_offset.x / gun_data.hammer_button.size.x)
+
+func set_trigger_pull_ratio(value: float):
+	trigger_pull_ratio = clamp(value, 0, 1)
+	gun_data.trigger.rotation = lerp(gun_data.trigger_start_angle, gun_data.trigger_final_angle, trigger_pull_ratio) * PI / 180
 	
-	if trigger_activation >= 1.0:
-		trigger_fire()
-		trigger_activation = 0.0
+	# Em ação dupla, o gatilho também controla o martelo
+	if gun_data.is_double_action:
+		set_hammer_pull_ratio(trigger_pull_ratio)
+	
+	if trigger_pull_ratio >= trigger_fire_point and trigger_ready:
+		fire()
+		hammer_locked = false
+		set_hammer_pull_ratio(0.0)
+		hammer_locked = true
 		trigger_ready = false
-	
-	set_hammer_activation(trigger_activation)
-	gun.trigger.rotation = lerp(gun.trigger_start_angle, gun.trigger_final_angle, trigger_activation) * PI / 180
 
-func set_hammer_activation(value: float):
-	hammer_activation = value
-	
-	if hammer_activation > 1.0:
-		hammer_activation = 1.0
-		hammer_ready = true
-	
-	gun.hammer.rotation = lerp(gun.hammer_start_angle, gun.hammer_final_angle, value) * PI / 180
+	# Reinicia o gatilho e o martelo ao soltar
+	if trigger_pull_ratio <= 0.1 and !trigger_ready:
+		hammer_locked = false
+		if gun_data.is_double_action:
+			trigger_ready = true
 
-func set_trigger_ready():
+func set_hammer_pull_ratio(value: float):
+	if hammer_locked:
+		return
+	
+	hammer_pull_ratio = clamp(value, 0.0, 1.0)
+	gun_data.hammer.rotation = lerp(gun_data.hammer_start_angle, gun_data.hammer_final_angle, hammer_pull_ratio) * PI / 180
+	
+	# Em ação simples, o martelo deve ser puxado manualmente para disparar
+	if hammer_pull_ratio == 1.0:
+		trigger_ready = true  # Gatilho pronto para disparar com menor movimento
+		hammer_locked = true
+
+func reset_trigger_ready():
 	trigger_ready = true
 
-func trigger_fire():
-	if get_chambered_bullet():
-		gun_audio_player.stream = gun._fire_sound
-	gun.trigger_button.release_swipe()
-	gun_audio_player.play()
+func fire():
+	if is_bullet_chambered():
+		audio_player.stream = gun_data._fire_sound
+		animation_player.stop()
+		animation_player.play("fire")
+		
+	else:
+		audio_player.stream = preload("res://assets/Revolver Empty.wav")
+	
+	print(cylinder_selected)
+	cylinder_selected = (cylinder_selected + 1) % gun_data.bullets_capacity
+	
+	audio_player.play()
 
-func get_chambered_bullet():
-	return bullets_in_cylinder[0]
+func is_bullet_chambered() -> bool:
+	return cylinder[cylinder_selected]
 
-func when_game_resize():
+func adjust_position_on_resize():
 	position = Global.hud.size / 2
-	gun.update_buttons_position()
+	gun_data.update_buttons_position()

@@ -13,6 +13,7 @@ config_version=5
 config/name="Revolver Ultra Cu"
 run/main_scene="res://app.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]

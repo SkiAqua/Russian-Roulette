@@ -1,7 +1,11 @@
 class_name GunResource
 extends Resource
 
-@export_range(1,12) var _bullets_capacity: = 1
+@export_range(3,12) var bullets_capacity: = 1
+@export var is_double_action: bool = true
+@export var _fire_particles_position: = Vector2.ZERO
+@export var _gun_offset: Vector2
+
 @export var _fire_sound: AudioStream
 @export var _body_texture: Texture2D
 @export var _barrel_position: Vector2
@@ -22,10 +26,14 @@ extends Resource
 
 @export_category('Rotation Angles')
 @export var trigger_start_angle: = 0
-@export var trigger_final_angle: = -30
+@export var trigger_final_angle: = -40
 
 @export var hammer_start_angle: = 0
 @export var hammer_final_angle: = 30
+
+@export var _barrel_open_texture: Texture2D
+@export var _bullet_texture: Texture2D
+@export var _bullet_icon: Texture2D
 
 # References to swipe buttons associated with each weapon component
 var trigger_button: SwipeButton
@@ -57,6 +65,7 @@ func assemble_components(gun_node: Node2D, control_area: Node = null):
 	barrel.texture = _barrel_texture
 	barrel.position = _barrel_position
 	barrel.name = 'Barrel'
+	barrel.z_index = 2
 	
 	hammer.position = _hammer_position
 	hammer.texture = _hammer_texture
@@ -82,7 +91,10 @@ func assemble_components(gun_node: Node2D, control_area: Node = null):
 	trigger_button = SwipeButton.new()
 	hammer_button = SwipeButton.new()
 	barrel_button = SwipeButton.new()
-	
+	if Global.debug:
+		trigger_button.set_debug_visibility(true)
+		hammer_button.set_debug_visibility(true)
+		barrel_button.set_debug_visibility(true)
 	# Update button positions based on component positions
 	update_buttons_position()
 	

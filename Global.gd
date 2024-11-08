@@ -1,6 +1,6 @@
 extends Node
 
-var debug: = true
+var debug: = false
 
 @onready var hud: = get_tree().root.get_node('/root/App/HUD')
 

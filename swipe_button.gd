@@ -14,6 +14,7 @@ signal limit_exceeded
 
 var _click_offset: = Vector2.ZERO
 var _click_position: = Vector2.ZERO
+
 var swipe_offset: = Vector2.ZERO
 
 func _draw():
@@ -28,6 +29,7 @@ func _init():
 	set_debug_visibility(_debug_visibility)
 	action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 	keep_pressed_outside = true
+	z_index = 99
 	button_down.connect(update_click_offset)
 
 func _physics_process(delta: float) -> void:

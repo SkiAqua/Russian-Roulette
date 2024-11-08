@@ -1,16 +1,53 @@
-[gd_scene load_steps=3 format=3 uid="uid://dtv060wthgke5"]
+[gd_scene load_steps=6 format=3 uid="uid://dtv060wthgke5"]
 
 [ext_resource type="Script" path="res://gun.gd" id="1_d7sxu"]
 [ext_resource type="Resource" uid="uid://cp6xsnvg2ddng" path="res://guns/Colt Python.tres" id="2_qbwvd"]
 
+[sub_resource type="Animation" id="Animation_770no"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_0thsu"]
+resource_name = "fire"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.06, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.2, 1)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wd25x"]
+_data = {
+"RESET": SubResource("Animation_770no"),
+"fire": SubResource("Animation_0thsu")
+}
+
 [node name="App" type="Node"]
 
 [node name="Gun" type="Node2D" parent="."]
-position = Vector2(687, 364)
+scale = Vector2(0.8, 0.8)
 script = ExtResource("1_d7sxu")
-gun = ExtResource("2_qbwvd")
+gun_data = ExtResource("2_qbwvd")
 
 [node name="Animation" type="AnimationPlayer" parent="Gun"]
+libraries = {
+"": SubResource("AnimationLibrary_wd25x")
+}
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="Gun"]
 
@@ -35,6 +72,18 @@ grow_vertical = 2
 color = Color(0.34902, 0.34902, 0.552941, 1)
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
+
+[node name="Button" type="Button" parent="HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_top = 0.81
+anchor_right = 0.122
+anchor_bottom = 0.98
+offset_top = -50.0
+offset_right = 50.0
+grow_vertical = 0
 
 [node name="Triggers" type="Control" parent="."]
 layout_mode = 3

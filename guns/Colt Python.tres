@@ -9,7 +9,10 @@
 
 [resource]
 script = ExtResource("1_ka27n")
-_bullets_capacity = 6
+bullets_capacity = 6
+is_double_action = true
+_fire_particles_position = Vector2(0, 0)
+_gun_offset = Vector2(1000, 360)
 _fire_sound = ExtResource("3_noxf3")
 _body_texture = ExtResource("2_flfon")
 _barrel_position = Vector2(125, -137)
@@ -21,6 +24,6 @@ _hammer_offset = Vector2(-4, -34)
 _trigger_texture = ExtResource("4_1ubx0")
 _trigger_offset = Vector2(0, 40)
 trigger_start_angle = 0
-trigger_final_angle = -30
+trigger_final_angle = -40
 hammer_start_angle = 0
 hammer_final_angle = 30
