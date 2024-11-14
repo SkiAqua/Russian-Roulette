@@ -45,14 +45,14 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	# Atualiza o quanto o gatilho foi puxado
-	if gun_data.trigger_button.swipe_offset.x > 0:
-		set_trigger_pull_ratio(gun_data.trigger_button.swipe_offset.x / gun_data.trigger_button.size.x)
+	if gun_data.trigger_button.drag_offset.x > 0:
+		set_trigger_pull_ratio(gun_data.trigger_button.drag_offset.x / gun_data.trigger_button.size.x)
 	elif trigger_pull_ratio > 0:
 		set_trigger_pull_ratio(trigger_pull_ratio - 0.1)
 
 	# Atualiza o quanto o martelo foi puxado
-	if gun_data.hammer_button.swipe_offset.x > 0:
-		set_hammer_pull_ratio(gun_data.hammer_button.swipe_offset.x / gun_data.hammer_button.size.x)
+	if gun_data.hammer_button.drag_offset.x > 0:
+		set_hammer_pull_ratio(gun_data.hammer_button.drag_offset.x / gun_data.hammer_button.size.x)
 
 func set_trigger_pull_ratio(value: float):
 	trigger_pull_ratio = clamp(value, 0, 1)
@@ -97,7 +97,7 @@ func fire():
 		animation_player.play("fire")
 		
 	else:
-		audio_player.stream = preload("res://assets/Revolver Empty.wav")
+		audio_player.stream = gun_data._free_chamber_sound
 	
 	print(cylinder_selected)
 	cylinder_selected = (cylinder_selected + 1) % gun_data.bullets_capacity

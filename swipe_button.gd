@@ -7,22 +7,26 @@ class_name SwipeButton
 var _debug_color: = Color(0, 1, 0, .8)
 var _debug_backcolor: = Color(0, 1, 0, .5)
 var _debug_line_color: = Color(255,0,0)
-
 @export var limit: = Vector2.ZERO
 var _limit_broke: = false
-signal limit_exceeded
+
+@export var calculate_swipe: = true
 
 var _click_offset: = Vector2.ZERO
 var _click_position: = Vector2.ZERO
 
-var swipe_offset: = Vector2.ZERO
+var drag_offset: = Vector2.ZERO
+
+var _swipe_offset: = Vector2.ZERO
+var _swipe_force: = Vector2.ZERO
+signal limit_exceeded
+signal swipe(force)
 
 func _draw():
 	draw_rect(Rect2(Vector2.ZERO, size), _debug_backcolor)
 	draw_rect(Rect2(Vector2.ZERO, size), _debug_color, false, 3)
 	
-	draw_line(_click_offset,_click_offset + swipe_offset, _debug_line_color, 3)
-
+	draw_line(_click_offset,_click_offset + drag_offset, _debug_line_color, 3)
 	draw_rect(Rect2(_click_offset-limit, limit*2), _debug_line_color, false, 1)
 
 func _init():
@@ -31,25 +35,32 @@ func _init():
 	keep_pressed_outside = true
 	z_index = 99
 	button_down.connect(update_click_offset)
+	button_up.connect(release_drag)
 
-func _physics_process(delta: float) -> void:
-	swipe_offset.x = 0
-	swipe_offset.y = 0
+func _physics_process(_delta: float) -> void:
+
 	if button_pressed:
-		swipe_offset = get_global_mouse_position() - _click_position
+		drag_offset = get_global_mouse_position() - _click_position
 
 		queue_redraw()
 		if limit > Vector2.ZERO:
-			if abs(swipe_offset.x) > limit.x or abs(swipe_offset.y) > limit.y:
+			if abs(drag_offset.x) > limit.x or abs(drag_offset.y) > limit.y:
 				if not _limit_broke:
 					button_pressed = false
 					button_up.emit()
-					limit_exceeded.emit(abs(swipe_offset) + _click_offset)
+					limit_exceeded.emit(abs(drag_offset) + _click_offset)
 					_limit_broke = true
+			
+		if calculate_swipe:
+			_swipe_offset = lerp(_swipe_offset, get_global_mouse_position(), .1)
+			_swipe_force = get_global_mouse_position() - _swipe_offset
 
-func release_swipe():
-	swipe_offset = Vector2.ZERO
+func release_drag():
+	drag_offset = Vector2.ZERO
 	_limit_broke = true
+
+	if calculate_swipe:
+		swipe.emit(_swipe_force)
 
 func set_debug_visibility(value):
 	_debug_visibility = value
@@ -62,3 +73,6 @@ func update_click_offset():
 	_click_offset = get_global_mouse_position() - global_position
 	_click_position = get_global_mouse_position()
 	_limit_broke = false
+
+	if calculate_swipe:
+		_swipe_offset = get_global_mouse_position()
