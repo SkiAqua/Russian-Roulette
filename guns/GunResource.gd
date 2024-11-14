@@ -7,6 +7,9 @@ extends Resource
 @export var _gun_offset: Vector2
 
 @export var _fire_sound: AudioStream
+@export var _free_chamber_sound: AudioStream = load("res://assets/Revolver Empty.wav")
+@export var _barrel_roll_sound: AudioStream
+
 @export var _body_texture: Texture2D
 @export var _barrel_position: Vector2
 @export var _hammer_position: Vector2
@@ -91,6 +94,7 @@ func assemble_components(gun_node: Node2D, control_area: Node = null):
 	trigger_button = SwipeButton.new()
 	hammer_button = SwipeButton.new()
 	barrel_button = SwipeButton.new()
+	barrel_button.calculate_swipe = true
 	if Global.debug:
 		trigger_button.set_debug_visibility(true)
 		hammer_button.set_debug_visibility(true)

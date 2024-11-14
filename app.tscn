@@ -49,7 +49,9 @@ libraries = {
 "": SubResource("AnimationLibrary_wd25x")
 }
 
-[node name="AudioPlayer" type="AudioStreamPlayer" parent="Gun"]
+[node name="FirePlayer" type="AudioStreamPlayer" parent="Gun"]
+
+[node name="TickPlayer" type="AudioStreamPlayer" parent="Gun"]
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
